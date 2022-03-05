@@ -22,7 +22,17 @@ namespace _2019AM601_2018CR610.Controllers
         [Route("api/alumnos")]
         public IActionResult Get()
         {
-            IEnumerable<Alumnos> list = from e in _context.alumnos select e;
+            var list = (from e in _context.alumnos 
+                                        join d in _context.departamentos on e.id equals d.id
+                                        select new
+                                        {
+                                            e.carnet,
+                                            e.nombre,
+                                            e.apellidos,
+                                            e.dui,
+                                            d.departamento,
+                                            e.estado
+                                        }).ToList();
 
             if (list.Count() > 0)
             {
@@ -37,9 +47,18 @@ namespace _2019AM601_2018CR610.Controllers
 
         public IActionResult Get(int id)
         {
-            Alumnos item = (from e in _context.alumnos
+            var item = (from e in _context.alumnos
                                   where e.id == id
-                                  select e).FirstOrDefault();
+                                    join d in _context.departamentos on e.id equals d.id
+                            select new
+                            {
+                                e.carnet,
+                                e.nombre,
+                                e.apellidos,
+                                e.dui,
+                                d.departamento,
+                                e.estado
+                            });
 
             if (item != null)
             {
@@ -84,7 +103,6 @@ namespace _2019AM601_2018CR610.Controllers
             data.nombre = item.nombre;
             data.apellidos = item.apellidos;
             data.dui = item.dui;
-            data.departamentoId = item.departamentoId;
             data.estado = item.estado;
 
             _context.Entry(data).State = EntityState.Modified;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using _2019AM601_2018CR610.Models;
 using Microsoft.EntityFrameworkCore;
+
 namespace _2019AM601_2018CR610.Controllers
 {
     [Route("api/[controller]")]
@@ -21,7 +22,15 @@ namespace _2019AM601_2018CR610.Controllers
         [Route("api/notas")]
         public IActionResult Get()
         {
-            IEnumerable<Notas> list = from e in _context.notas select e;
+            var list = (from e in _context.notas
+                                      join i in _context.inscripciones on e.id equals i.id
+                                      select new
+                                      {
+                                          i.fecha,
+                                          e.evaluacion,
+                                          e.nota,
+                                          e.porcentaje
+                                      }).ToList();
 
             if (list.Count() > 0)
             {
@@ -36,9 +45,16 @@ namespace _2019AM601_2018CR610.Controllers
 
         public IActionResult Get(int id)
         {
-            Notas item = (from e in _context.notas
-                          where e.id == id
-                             select e).FirstOrDefault();
+            var item = (from e in _context.notas
+                        where e.id == id
+                        join i in _context.inscripciones on e.id equals i.id
+                        select new
+                        {
+                            i.fecha,
+                            e.evaluacion,
+                            e.nota,
+                            e.porcentaje
+                        });
 
             if (item != null)
             {
@@ -72,7 +88,7 @@ namespace _2019AM601_2018CR610.Controllers
         {
             Notas data = (from e in _context.notas
                           where e.id == item.id
-                             select e).FirstOrDefault();
+                          select e).FirstOrDefault();
 
             if (data is null)
             {
@@ -87,6 +103,5 @@ namespace _2019AM601_2018CR610.Controllers
 
             return Ok(data);
         }
-
     }
 }
