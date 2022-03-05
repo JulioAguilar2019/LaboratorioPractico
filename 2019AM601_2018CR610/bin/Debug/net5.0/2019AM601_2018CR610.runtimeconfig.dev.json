@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\Carranza\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Carranza\\.nuget\\packages"
+    ]
+  }
+}
