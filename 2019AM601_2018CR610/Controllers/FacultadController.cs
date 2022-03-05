@@ -7,22 +7,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _2019AM601_2018CR610.Controllers
 {
-    //[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class DepartamentosController : ControllerBase
+    public class FacultadController : ControllerBase
     {
         private readonly NotasContext _context;
 
-        public DepartamentosController(NotasContext context)
+        public FacultadController(NotasContext context)
         {
             this._context = context;
         }
 
         [HttpGet]
-        [Route("api/departamentos")]
+        [Route("api/facultad")]
         public IActionResult Get()
         {
-            IEnumerable<Departamentos> list = from e in _context.departamentos select e;
+            IEnumerable<Facultad> list = from e in _context.facultad select e;
 
             if (list.Count() > 0)
             {
@@ -33,13 +33,13 @@ namespace _2019AM601_2018CR610.Controllers
         }
 
         [HttpGet]
-        [Route("api/departamentos/{id}")]
+        [Route("api/facultad/{id}")]
 
         public IActionResult Get(int id)
         {
-            Departamentos item = (from e in _context.departamentos
-                                  where e.id == id
-                                   select e).FirstOrDefault();
+            Facultad item = (from e in _context.facultad
+                             where e.id == id
+                                  select e).FirstOrDefault();
 
             if (item != null)
             {
@@ -50,12 +50,12 @@ namespace _2019AM601_2018CR610.Controllers
         }
 
         [HttpPost]
-        [Route("api/departamentos")]
-        public IActionResult guardarEquipo([FromBody] Departamentos item)
+        [Route("api/facultad")]
+        public IActionResult guardarEquipo([FromBody] Facultad item)
         {
             try
             {
-                _context.departamentos.Add(item);
+                _context.facultad.Add(item);
 
                 _context.SaveChanges();
 
@@ -68,19 +68,19 @@ namespace _2019AM601_2018CR610.Controllers
         }
 
         [HttpPut]
-        [Route("api/departamentos")]
-        public IActionResult updateEquipo([FromBody] Departamentos item)
+        [Route("api/facultad")]
+        public IActionResult updateEquipo([FromBody] Facultad item)
         {
-            Departamentos data = (from e in _context.departamentos
-                                   where e.id == item.id
-                                   select e).FirstOrDefault();
+            Facultad data = (from e in _context.facultad
+                             where e.id == item.id
+                                  select e).FirstOrDefault();
 
             if (data is null)
             {
                 return NotFound();
             }
 
-            data.departamento = item.departamento;
+            data.facultad = item.facultad;
 
             _context.Entry(data).State = EntityState.Modified;
             _context.SaveChanges();
@@ -88,5 +88,6 @@ namespace _2019AM601_2018CR610.Controllers
 
             return Ok(data);
         }
+
     }
 }
