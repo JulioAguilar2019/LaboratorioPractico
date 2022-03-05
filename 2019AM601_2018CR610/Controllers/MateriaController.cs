@@ -7,22 +7,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _2019AM601_2018CR610.Controllers
 {
-    //[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class DepartamentosController : ControllerBase
+    public class MateriaController : ControllerBase
     {
         private readonly NotasContext _context;
 
-        public DepartamentosController(NotasContext context)
+        public MateriaController(NotasContext context)
         {
             this._context = context;
         }
 
         [HttpGet]
-        [Route("api/departamentos")]
+        [Route("api/materia")]
         public IActionResult Get()
         {
-            IEnumerable<Departamentos> list = from e in _context.departamentos select e;
+            IEnumerable<Materias> list = from e in _context.materias select e;
 
             if (list.Count() > 0)
             {
@@ -33,13 +33,13 @@ namespace _2019AM601_2018CR610.Controllers
         }
 
         [HttpGet]
-        [Route("api/departamentos/{id}")]
+        [Route("api/materia/{id}")]
 
         public IActionResult Get(int id)
         {
-            Departamentos item = (from e in _context.departamentos
-                                  where e.id == id
-                                   select e).FirstOrDefault();
+            Materias item = (from e in _context.materias
+                             where e.id == id
+                                  select e).FirstOrDefault();
 
             if (item != null)
             {
@@ -50,12 +50,12 @@ namespace _2019AM601_2018CR610.Controllers
         }
 
         [HttpPost]
-        [Route("api/departamentos")]
-        public IActionResult guardarEquipo([FromBody] Departamentos item)
+        [Route("api/materia")]
+        public IActionResult guardarEquipo([FromBody] Materias item)
         {
             try
             {
-                _context.departamentos.Add(item);
+                _context.materias.Add(item);
 
                 _context.SaveChanges();
 
@@ -68,19 +68,19 @@ namespace _2019AM601_2018CR610.Controllers
         }
 
         [HttpPut]
-        [Route("api/departamentos")]
-        public IActionResult updateEquipo([FromBody] Departamentos item)
+        [Route("api/materia")]
+        public IActionResult updateEquipo([FromBody] Materias item)
         {
-            Departamentos data = (from e in _context.departamentos
-                                   where e.id == item.id
-                                   select e).FirstOrDefault();
+            Materias data = (from e in _context.materias
+                             where e.id == item.id
+                                  select e).FirstOrDefault();
 
             if (data is null)
             {
                 return NotFound();
             }
 
-            data.departamento = item.departamento;
+            data.materia = item.materia;
 
             _context.Entry(data).State = EntityState.Modified;
             _context.SaveChanges();
@@ -88,5 +88,7 @@ namespace _2019AM601_2018CR610.Controllers
 
             return Ok(data);
         }
+
     }
+
 }
