@@ -22,7 +22,15 @@ namespace _2019AM601_2018CR610.Controllers
         [Route("api/materia")]
         public IActionResult Get()
         {
-            IEnumerable<Materias> list = from e in _context.materias select e;
+            var list = (from e in _context.materias
+                                         join f in _context.facultad on e.id equals f.id
+                                         select new
+                                         {
+                                             f.facultad,
+                                             e.materia,
+                                             e.unidades_valorativas,
+                                             e.estado
+                                         });
 
             if (list.Count() > 0)
             {
@@ -37,9 +45,16 @@ namespace _2019AM601_2018CR610.Controllers
 
         public IActionResult Get(int id)
         {
-            Materias item = (from e in _context.materias
+            var item = (from e in _context.materias
                              where e.id == id
-                                  select e).FirstOrDefault();
+                             join f in _context.facultad on e.id equals f.id
+                                  select new
+                                  {
+                                      f.facultad,
+                                      e.materia,
+                                      e.unidades_valorativas,
+                                      e.estado
+                                  });
 
             if (item != null)
             {

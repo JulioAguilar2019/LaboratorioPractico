@@ -22,7 +22,17 @@ namespace _2019AM601_2018CR610.Controllers
         [Route("api/inscripciones")]
         public IActionResult Get()
         {
-            IEnumerable<Inscripciones> list = from e in _context.inscripciones select e;
+            var list = (from e in _context.inscripciones
+                                              join a in _context.alumnos on e.id equals a.id
+                                              join m in _context.materias on e.id equals m.id
+                                              select new
+                                              {
+                                                  a.nombre,
+                                                  m.materia,
+                                                  e.inscripcion,
+                                                  e.fecha,
+                                                  e.estado
+                                              }).ToList();
 
             if (list.Count() > 0)
             {
@@ -37,9 +47,18 @@ namespace _2019AM601_2018CR610.Controllers
 
         public IActionResult Get(int id)
         {
-            Inscripciones item = (from e in _context.inscripciones
+            var item = (from e in _context.inscripciones
                             where e.id == id
-                            select e).FirstOrDefault();
+                                  join a in _context.alumnos on e.id equals a.id
+                                  join m in _context.materias on e.id equals m.id
+                                  select new
+                                  {
+                                      a.nombre,
+                                      m.materia,
+                                      e.inscripcion,
+                                      e.fecha,
+                                      e.estado
+                                  }).ToList();
 
             if (item != null)
             {
